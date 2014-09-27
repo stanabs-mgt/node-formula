@@ -20,13 +20,11 @@
 
 {% if pillar_get('node:install_from_source') %}
 {% set npm_requirement = npm_src_requirement %}
-{% elif grains['os'] == 'Debian' and grains['osrelease']|float < 8 %}
-{% set npm_requirement = npm_src_requirement %}
 {% endif %}
 
 {% set node = salt['grains.filter_by']({
     'Debian': {
-        'node_pkg': 'nodejs' if grains['osrelease']|float < 8 else 'nodejs-legacy',
+        'node_pkg': 'nodejs-legacy',
         'npm_pkg': 'npm',
     },
     'Ubuntu': {

@@ -18,18 +18,13 @@ nodejs.ppa:
       pkg: nodejs
 {%- else %}
 npm:
-{%- if grains['os'] == 'Debian' and grains['osrelease']|float < 8 %}
-  file.exists:
-    - name: {{ npm_bin }}
-    - require:
-      - file: install-npm
-{% include 'node/source_npm.sls' %}
-{%- else %}
   pkg.installed:
     - name: {{ node.npm_pkg }}
     - reload_modules: true
     - require:
       - pkg: nodejs
+{%- if grains['os'] == 'Debian' and grains['oscodename'] == 'wheezy' %}
+    - dist: wheezy-backports
 {%- endif %}
 {%- endif %}
 nodejs:
