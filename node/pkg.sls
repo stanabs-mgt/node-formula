@@ -1,4 +1,4 @@
-{%- from "node/map.jinja" import node, npm_bin with context %}
+{%- from "node/map.jinja" import node with context %}
 
 {%- if grains['os'] == 'Ubuntu' and salt['pillar.get']('node:install_from_ppa') %}
 nodejs.ppa:
