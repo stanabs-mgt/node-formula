@@ -1,6 +1,8 @@
 {% set pillar_get = salt['pillar.get'] -%}
+{% set install_from_ppa = pillar_get('node:install_from_ppa') %}
+{% set install_from_source = pillar_get('node:install_from_source') %}
 
-{% if pillar_get('node:install_from_source') %}
+{% if install_from_source %}
 {% set default_npm_prefix = '/usr/local' %}
 {% else %}
 {% set default_npm_prefix = '/usr' %}
@@ -18,16 +20,16 @@
 
 {% set node = salt['grains.filter_by']({
     'Debian': {
-        'node_pkg': 'nodejs' if pillar_get('node:install_from_ppa') else 'nodejs-legacy',
-        'npm_pkg': 'nodejs' if pillar_get('node:install_from_ppa') else 'npm',
+        'node_pkg': 'nodejs' if install_from_ppa else 'nodejs-legacy',
+        'npm_pkg': 'nodejs' if install_from_ppa else 'npm',
     },
     'Ubuntu': {
         'node_pkg': 'nodejs',
-        'npm_pkg': 'nodejs' if pillar_get('node:install_from_ppa') else 'npm',
+        'npm_pkg': 'nodejs' if install_from_ppa else 'npm',
     },
 }, grain='os', merge=pillar_get('node:lookup')) %}
 
-{% if pillar_get('node:install_from_source') or (grains['os'] == 'Debian' and grains['osrelease']|float < 8) %}
+{% if install_from_source or (grains['os'] == 'Debian' and grains['osrelease']|float < 8) %}
 {% set npm_requirement = npm_src_requirement %}
 {% else %}
 {% set npm_requirement = 'pkg: {0}'.format(node['npm_pkg']) %}
