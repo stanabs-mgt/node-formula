@@ -11,7 +11,7 @@
 {% set npm_bin = '{0}/bin/npm'.format(npm_prefix) %}
 {% set npm_src_requirement = 'file: {0}'.format(npm_bin) %}
 
-{% if npm_prefix == '/usr' %}
+{% if npm_prefix == '/usr' and not (install_from_ppa and 'deb.nodesource.com' in pillar_get('node:ppa:repository_url', '')) %}
 {% set npmrc_prefix = '' %}
 {% else %}
 {% set npmrc_prefix = npm_prefix %}
